@@ -1,10 +1,12 @@
 let PositionData = {}
 const movePawn =(index, side, isLeft)=>{
     const innerMovePawn = () =>{
-        alert (`Пешка №${index} цвет ${side} идет на лево ${isLeft}`)
+        alert (`Пешка №${index} цвет ${side} идет на  ${isLeft ?'лево' :'право'}`)
     }
     return innerMovePawn
 }
+const backlightLeftParent=document.getElementById("backlight_left_parent");
+const backlightRightParent=document.getElementById('backlight_right_parent');
 window.addEventListener('load', () => {
     var backlight_left = document.getElementById("backlight_left");
     var backlight_right = document.getElementById("backlight_right");
@@ -20,7 +22,7 @@ window.addEventListener('load', () => {
         const isRightHas = isHasRow && ((Number (x) + 1) in PositionData[Number(y) + difference])  
         if (x > 1 && !isLeftHas) {
             const backlight_left_copy = backlight_left.cloneNode(true)
-            parentnot.replaceChild(backlight_left_copy,backlight_left)
+            backlight_left_parent.replaceChild(backlight_left_copy,backlight_left)
             backlight_left_copy.style.display = 'block';
             backlight_left_copy.style.left = (x - 2) * 100 + '%';
             backlight_left_copy.style.top = (Number(y) + difference + -1) * 100 + "%";
@@ -30,8 +32,8 @@ window.addEventListener('load', () => {
             backlight_left.style.display = 'none';
         }
         if (x < 8 && !isRightHas) {
-            const backlight_right_copy = backlight_left.cloneNode(true)
-            parentnot.replaceChild(backlight_right_copy,backlight_right)
+            const backlight_right_copy = backlight_right.cloneNode(true)
+            backlightRightParent.replaceChild(backlight_right_copy,backlight_right)
             backlight_right_copy.style.display = 'block';
             backlight_right_copy.style.left = (x - 2) * 100 + '%';
             backlight_right_copy.style.top = (Number(y) + difference + -1) * 100 + "%";
