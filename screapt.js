@@ -22,18 +22,21 @@ window.addEventListener('load', () => {
 
         if (x > 1 && !isLeftHas) {
             const backlight_left_copy = backlight_left.cloneNode(true)
-            backlight_left_copy.setAttribute('data-x', String(Number(x) - 1));
-            backlight_left_copy.setAttribute('data-y', String(Number(y) + difference));
             backlight_left_parent.replaceChild(backlight_left_copy, backlight_left)
             backlight_left_copy.style.display = 'block';
             backlight_left_copy.style.left = (x - 2) * 100 + '%';
             backlight_left_copy.style.top = (Number(y) + difference + -1) * 100 + "%";
-            backlight_left_copy.addEventListener('click', movePawn(i, side, true))
-            delete PositionData[Number(y)][Number(x)]
-            if (!((Number(y) + difference) in PositionData)) {
-                PositionData[Number(y) + difference] = {}
-            }
-            PositionData[Number(y) + difference][ Number (x) -1] = side === 'black'? true: false;
+            backlight_left_copy.addEventListener('click', () => {
+                backlight_left_copy.setAttribute('data-x', String(Number(x) - 1));
+                backlight_left_copy.setAttribute('data-y', String(Number(y) + difference));
+                movePawn(i, side, true)
+                delete PositionData[Number(y)][Number(x)]
+                if (!((Number(y) + difference) in PositionData)) {
+                    PositionData[Number(y) + difference] = {}
+                }
+                PositionData[Number(y) + difference][Number(x) - 1] = side === 'black' ? true : false;
+            })
+
         }
         else {
             backlight_left.style.display = 'none';
@@ -41,17 +44,20 @@ window.addEventListener('load', () => {
         if (x < 8 && !isRightHas) {
             delete PositionData[Number(y)][Number(x)]
             const backlight_right_copy = backlight_right.cloneNode(true)
-            backlight_right_copy.setAttribute('data-x', String(Number(x) + 1));
-            backlight_right_copy.setAttribute('data-y', String(Number(y) + difference));
             backlightRightParent.replaceChild(backlight_right_copy, backlight_right)
             backlight_right_copy.style.display = 'block';
             backlight_right_copy.style.left = (x - 2) * 100 + '%';
             backlight_right_copy.style.top = (Number(y) + difference + -1) * 100 + "%";
-            backlight_right_copy.addEventListener('click', movePawn(i, side, false))
-            if (!((Number(y) + difference) in PositionData)) {
-                PositionData[Number(y) + difference] = {}
-            }
-            PositionData[Number(y) + difference][ Number (x) +1] = side === 'black'? true: false;
+            backlight_right_copy.addEventListener('click', () => {
+                backlight_right_copy.setAttribute('data-x', String(Number(x) + 1));
+                backlight_right_copy.setAttribute('data-y', String(Number(y) + difference));
+                movePawn(i, side, false)
+                if (!((Number(y) + difference) in PositionData)) {
+                    PositionData[Number(y) + difference] = {}
+                }
+                PositionData[Number(y) + difference][Number(x) + 1] = side === 'black' ? true : false;
+            })
+
         }
         else {
             backlight_right.style.display = 'none';
