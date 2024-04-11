@@ -1,13 +1,10 @@
 let PositionData = {}
 const movePawn = (index, side, isLeft) => {
-    const  innerMovePawn = () => {
-        console.log (1)
         const pawn = document.getElementById(`${side}${index}`);
         const x = pawn.getAttribute('data-x');
         const y = pawn.getAttribute('data-y');
-        console.log(`${x} ${y}`)
-    }
-    return innerMovePawn
+        pawn.style.top = Number (y) * 100 + '%';
+        pawn.style.left = Number (x) * 100 + '%';
 }
 const backlightLeftParent = document.getElementById("backlight_left_parent");
 const backlightRightParent = document.getElementById('backlight_right_parent');
@@ -16,7 +13,8 @@ window.addEventListener('load', () => {
     const backlight_right = document.getElementById("backlight_right");
     const white = document.getElementsByClassName('white');
     const backlight_up = (x, y, side, i) => {
-        console.log(PositionData);
+        console.log(`${side}${i}`)
+        const pawn = document.getElementById(`${side}${i}`);
         var backlight_left = document.getElementById("backlight_left");
         var backlight_right = document.getElementById("backlight_right");
         const difference = side === 'white' ? -1 : 1;
@@ -26,13 +24,13 @@ window.addEventListener('load', () => {
 
         if (x > 1 && !isLeftHas) {
             const backlight_left_copy = backlight_left.cloneNode(true)
-            backlight_left_parent.replaceChild(backlight_left_copy, backlight_left)
+            backlightLeftParent.replaceChild(backlight_left_copy, backlight_left)
             backlight_left_copy.style.display = 'block';
             backlight_left_copy.style.left = (x - 2) * 100 + '%';
             backlight_left_copy.style.top = (Number(y) + difference + -1) * 100 + "%";
             backlight_left_copy.addEventListener('click', () => {
-                backlight_left_copy.setAttribute('data-x', String(Number(x) - 1));
-                backlight_left_copy.setAttribute('data-y', String(Number(y) + difference));
+                pawn.setAttribute('data-x', String(Number(x) - 1));
+                pawn.setAttribute('data-y', String(Number(y) + difference));
                 movePawn(i, side, true)
                 delete PositionData[Number(y)][Number(x)]
                 if (!((Number(y) + difference) in PositionData)) {
@@ -53,8 +51,8 @@ window.addEventListener('load', () => {
             backlight_right_copy.style.left = (x - 2) * 100 + '%';
             backlight_right_copy.style.top = (Number(y) + difference + -1) * 100 + "%";
             backlight_right_copy.addEventListener('click', () => {
-                backlight_right_copy.setAttribute('data-x', String(Number(x) + 1));
-                backlight_right_copy.setAttribute('data-y', String(Number(y) + difference));
+                pawn.setAttribute('data-x', String(Number(x) + 1));
+                pawn.setAttribute('data-y', String(Number(y) + difference));
                 movePawn(i, side, false)
                 if (!((Number(y) + difference) in PositionData)) {
                     PositionData[Number(y) + difference] = {}
