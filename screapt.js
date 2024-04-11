@@ -1,7 +1,11 @@
 let PositionData = {}
 const movePawn = (index, side, isLeft) => {
-    const innerMovePawn = () => {
-        alert(`Пешка №${index} цвет ${side} идет на  ${isLeft ? 'лево' : 'право'}`)
+    const  innerMovePawn = () => {
+        console.log (1)
+        const pawn = document.getElementById(`${side}${index}`);
+        const x = pawn.getAttribute('data-x');
+        const y = pawn.getAttribute('data-y');
+        console.log(`${x} ${y}`)
     }
     return innerMovePawn
 }
