@@ -1,4 +1,5 @@
 let PositionData = {}
+let currentStep = 1
 const movePawn = (index, side, isLeft) => {
         const pawn = document.getElementById(`${side}${index}`);
         const x = pawn.getAttribute('data-x');
@@ -7,6 +8,8 @@ const movePawn = (index, side, isLeft) => {
         const topValue = pawn.style.top||pawn.offsetTop;
         const differenceY = side === 'black' ? 1 : -1;
         const differenceX = isLeft? -1 : 1;
+        currentStep += 1;
+        console.log (`сейчас ход ${currentStep} игрок ${currentStep%2 ===0?1:2}`)
         pawn.style.top = parseFloat(topValue)+differenceY*100+"%";
         pawn.style.left = parseFloat(leftValue)+differenceX*100+"%";
 }
