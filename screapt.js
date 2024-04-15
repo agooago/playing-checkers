@@ -3,8 +3,12 @@ const movePawn = (index, side, isLeft) => {
         const pawn = document.getElementById(`${side}${index}`);
         const x = pawn.getAttribute('data-x');
         const y = pawn.getAttribute('data-y');
-        pawn.style.top = Number (y) * 100 + '%';
-        pawn.style.left = Number (x) * 100 + '%';
+        const leftValue = pawn.style.left||pawn.offsetLeft;
+        const topValue = pawn.style.top||pawn.offsetTop;
+        const differenceY = side === 'black' ? 1 : -1;
+        const differenceX = isLeft? -1 : 1;
+        pawn.style.top = parseFloat(topValue)+differenceY*100+"%";
+        pawn.style.left = parseFloat(leftValue)+differenceX*100+"%";
 }
 const backlightLeftParent = document.getElementById("backlight_left_parent");
 const backlightRightParent = document.getElementById('backlight_right_parent');
