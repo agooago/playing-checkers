@@ -1,5 +1,6 @@
 let PositionData = {}
 let currentStep = 1
+const stepCounter = document.getElementById ("counter");
 const movePawn = (index, side, isLeft) => {
         const pawn = document.getElementById(`${side}${index}`);
         const x = pawn.getAttribute('data-x');
@@ -12,6 +13,7 @@ const movePawn = (index, side, isLeft) => {
         console.log (`сейчас ход ${currentStep} игрок ${currentStep%2 ===0?1:2}`)
         pawn.style.top = parseFloat(topValue)+differenceY*100+"%";
         pawn.style.left = parseFloat(leftValue)+differenceX*100+"%";
+        stepCounter.innerText = `ход №${currentStep}`;
 }
 const backlightLeftParent = document.getElementById("backlight_left_parent");
 const backlightRightParent = document.getElementById('backlight_right_parent');

@@ -12,7 +12,50 @@ body {
     height: 100vh;
     justify-content: center;
     align-items: center;
+    position: relative;
 
+}
+#counter {
+    width:200.1488px ;
+    height: 150.1488px;
+    background-color: chartreuse;
+    position: absolute;
+    z-index: 1488;
+    top: 200.1488px;
+    left: 50.1488px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 1488px;
+    font-size: 25.1488px;
+}
+#timer{
+    width:200.1488px ;
+    height: 150.1488px;
+    background-color: chartreuse;
+    position: absolute;
+    z-index: 1488;
+    top: 400.1488px;
+    left: 50.1488px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 1488px;
+    font-size: 25.1488px;
+}
+#side{
+    width:200.1488px ;
+    height: 150.1488px;
+    background-color: chartreuse;
+    position: absolute;
+    z-index: 1488;
+    top: 300.1488px;
+    right: 50.1488px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 1488px;
+    font-size: 25.1488px;
 }
 
 .duska {
