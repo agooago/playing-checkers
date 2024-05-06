@@ -1,19 +1,53 @@
 let PositionData = {}
 let currentStep = 1
-const stepCounter = document.getElementById ("counter");
+let timerInterval;
+const startTimer = (duration) => {
+    clearInterval(timerInterval)
+    let timer = duration
+    timerInterval = setInterval(() => {
+        let minuties = Math.floor(timer / 60);
+        let seconds = timer % 60;
+        minuties = (minuties < 10 ? '0' : '') + minuties;
+        seconds = (seconds < 10 ? '0' : '') + seconds;
+        timerBlock.innerText = `${minuties}:${seconds}`;
+        if (--timer < 0) {
+            clearInterval(timerInterval);
+            timerBlock.innerText = 'время вышло';
+        }
+    }, 1000)
+};
+const textSide = (currentStep) => {
+    if (currentStep % 2 === 0) return "сейчас ходят черненкие";
+    return "сейчас ходят беленькие"
+}
+const startButton = document.getElementById("votMoiPelmen");
+const phone = document.getElementById("invisible_slise");
+const timerBlock = document.getElementById("timer")
+startButton.addEventListener("click", () => {
+    phone.style.opacity = '0%';
+    startButton.style.opacity = "0%";
+    startTimer (10)
+    setTimeout(() => {
+        phone.style.display = "none";
+        startButton.style.display = "none";
+    }, 2000)
+})
+const stepCounter = document.getElementById("counter");
+const gdeMoiPelmen = document.getElementById("side")
 const movePawn = (index, side, isLeft) => {
-        const pawn = document.getElementById(`${side}${index}`);
-        const x = pawn.getAttribute('data-x');
-        const y = pawn.getAttribute('data-y');
-        const leftValue = pawn.style.left||pawn.offsetLeft;
-        const topValue = pawn.style.top||pawn.offsetTop;
-        const differenceY = side === 'black' ? 1 : -1;
-        const differenceX = isLeft? -1 : 1;
-        currentStep += 1;
-        console.log (`сейчас ход ${currentStep} игрок ${currentStep%2 ===0?1:2}`)
-        pawn.style.top = parseFloat(topValue)+differenceY*100+"%";
-        pawn.style.left = parseFloat(leftValue)+differenceX*100+"%";
-        stepCounter.innerText = `ход №${currentStep}`;
+    const pawn = document.getElementById(`${side}${index}`);
+    const x = pawn.getAttribute('data-x');
+    const y = pawn.getAttribute('data-y');
+    const leftValue = pawn.style.left || pawn.offsetLeft;
+    const topValue = pawn.style.top || pawn.offsetTop;
+    const differenceY = side === 'black' ? 1 : -1;
+    const differenceX = isLeft ? -1 : 1;
+    startTimer (120)
+    currentStep += 1;
+    gdeMoiPelmen.innerText = textSide(currentStep);
+    pawn.style.top = parseFloat(topValue) + differenceY * 100 + "%";
+    pawn.style.left = parseFloat(leftValue) + differenceX * 100 + "%";
+    stepCounter.innerText = `ход №${currentStep}`;
 }
 const backlightLeftParent = document.getElementById("backlight_left_parent");
 const backlightRightParent = document.getElementById('backlight_right_parent');
