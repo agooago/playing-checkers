@@ -16,46 +16,47 @@ body {
 
 }
 #counter {
-    width:200.1488px ;
-    height: 150.1488px;
+    width:200.1px ;
+    height: 150.1px;
     background-color: chartreuse;
     position: absolute;
-    z-index: 1488;
-    top: 200.1488px;
-    left: 50.1488px;
+    z-index: 0.1;
+    top: 200.01px;
+    left: 50.01px;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 1488px;
-    font-size: 25.1488px;
+    border-radius: 25px;
+    font-size: 25.01px;
 }
 #timer{
-    width:200.1488px ;
-    height: 150.1488px;
+    width: 200px; ;
+    height: 150.1px;
     background-color: chartreuse;
     position: absolute;
-    z-index: 1488;
-    top: 400.1488px;
-    left: 50.1488px;
+    z-index: 5;
+    top: 400px;
+    left: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 1488px;
-    font-size: 25.1488px;
+    border-radius: 13px;
+    font-size: 25.13px;
 }
 #side{
-    width:200.1488px ;
-    height: 150.1488px;
+    width:200px ;
+    height: 200px;
     background-color: chartreuse;
     position: absolute;
-    z-index: 1488;
-    top: 300.1488px;
-    right: 50.1488px;
+    z-index:13;
+    top: 300px;
+    right: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 1488px;
-    font-size: 25.1488px;
+    text-align: center;
+    border-radius:13px;
+    font-size: 21px;
 }
 
 .duska {
@@ -157,3 +158,25 @@ body {
     height: 100%;
     display: none;
  }
+#votMoiPelmen{
+position: absolute;
+z-index: 999999999999999999999999999999999999999999999999999999999999999999999999999;
+height: 150px;
+width: 200px;
+background-color: red;
+border-radius: 30%;
+font-size: 34px;
+cursor: pointer;
+transition: opacity 2s ease-in-out ;
+}
+#invisible_slise{
+   position: absolute;
+   width: 100vw;
+   height: 100vh;
+   top: 0;
+   left: 0;
+   z-index: 999;
+   background-color: rgb(94, 97, 95);
+   opacity: 75%;
+   transition: opacity 2s ease-in-out ;
+}

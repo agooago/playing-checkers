@@ -26,7 +26,7 @@ const timerBlock = document.getElementById("timer")
 startButton.addEventListener("click", () => {
     phone.style.opacity = '0%';
     startButton.style.opacity = "0%";
-    startTimer (10)
+    startTimer(120)
     setTimeout(() => {
         phone.style.display = "none";
         startButton.style.display = "none";
@@ -42,7 +42,7 @@ const movePawn = (index, side, isLeft) => {
     const topValue = pawn.style.top || pawn.offsetTop;
     const differenceY = side === 'black' ? 1 : -1;
     const differenceX = isLeft ? -1 : 1;
-    startTimer (120)
+    startTimer(120)
     currentStep += 1;
     gdeMoiPelmen.innerText = textSide(currentStep);
     pawn.style.top = parseFloat(topValue) + differenceY * 100 + "%";
@@ -56,58 +56,59 @@ window.addEventListener('load', () => {
     const backlight_right = document.getElementById("backlight_right");
     const white = document.getElementsByClassName('white');
     const backlight_up = (x, y, side, i) => {
-        console.log(`${side}${i}`)
-        const pawn = document.getElementById(`${side}${i}`);
-        var backlight_left = document.getElementById("backlight_left");
-        var backlight_right = document.getElementById("backlight_right");
-        const difference = side === 'white' ? -1 : 1;
-        const isHasRow = (Number(y) + difference) in PositionData
-        const isLeftHas = isHasRow && ((Number(x) - 1) in PositionData[Number(y) + difference])
-        const isRightHas = isHasRow && ((Number(x) + 1) in PositionData[Number(y) + difference])
+        if (currentStep % 2 === 0 && side === 'black' || currentStep % 2 === 1 && side === 'white') {
+            const pawn = document.getElementById(`${side}${i}`);
+            var backlight_left = document.getElementById("backlight_left");
+            var backlight_right = document.getElementById("backlight_right");
+            const difference = side === 'white' ? -1 : 1;
+            const isHasRow = (Number(y) + difference) in PositionData
+            const isLeftHas = isHasRow && ((Number(x) - 1) in PositionData[Number(y) + difference])
+            const isRightHas = isHasRow && ((Number(x) + 1) in PositionData[Number(y) + difference])
 
-        if (x > 1 && !isLeftHas) {
-            const backlight_left_copy = backlight_left.cloneNode(true)
-            backlightLeftParent.replaceChild(backlight_left_copy, backlight_left)
-            backlight_left_copy.style.display = 'block';
-            backlight_left_copy.style.left = (x - 2) * 100 + '%';
-            backlight_left_copy.style.top = (Number(y) + difference + -1) * 100 + "%";
-            backlight_left_copy.addEventListener('click', () => {
-                pawn.setAttribute('data-x', String(Number(x) - 1));
-                pawn.setAttribute('data-y', String(Number(y) + difference));
-                movePawn(i, side, true)
+            if (x > 1 && !isLeftHas) {
+                const backlight_left_copy = backlight_left.cloneNode(true)
+                backlightLeftParent.replaceChild(backlight_left_copy, backlight_left)
+                backlight_left_copy.style.display = 'block';
+                backlight_left_copy.style.left = (x - 2) * 100 + '%';
+                backlight_left_copy.style.top = (Number(y) + difference + -1) * 100 + "%";
+                backlight_left_copy.addEventListener('click', () => {
+                    pawn.setAttribute('data-x', String(Number(x) - 1));
+                    pawn.setAttribute('data-y', String(Number(y) + difference));
+                    movePawn(i, side, true)
+                    delete PositionData[Number(y)][Number(x)]
+                    if (!((Number(y) + difference) in PositionData)) {
+                        PositionData[Number(y) + difference] = {}
+                    }
+                    PositionData[Number(y) + difference][Number(x) - 1] = side === 'black' ? true : false;
+                })
+
+            }
+            else {
+                backlight_left.style.display = 'none';
+            }
+            if (x < 8 && !isRightHas) {
                 delete PositionData[Number(y)][Number(x)]
-                if (!((Number(y) + difference) in PositionData)) {
-                    PositionData[Number(y) + difference] = {}
-                }
-                PositionData[Number(y) + difference][Number(x) - 1] = side === 'black' ? true : false;
-            })
+                const backlight_right_copy = backlight_right.cloneNode(true)
+                backlightRightParent.replaceChild(backlight_right_copy, backlight_right)
+                backlight_right_copy.style.display = 'block';
+                backlight_right_copy.style.left = (x - 2) * 100 + '%';
+                backlight_right_copy.style.top = (Number(y) + difference + -1) * 100 + "%";
+                backlight_right_copy.addEventListener('click', () => {
+                    pawn.setAttribute('data-x', String(Number(x) + 1));
+                    pawn.setAttribute('data-y', String(Number(y) + difference));
+                    movePawn(i, side, false)
+                    if (!((Number(y) + difference) in PositionData)) {
+                        PositionData[Number(y) + difference] = {}
+                    }
+                    PositionData[Number(y) + difference][Number(x) + 1] = side === 'black' ? true : false;
+                })
 
+            }
+            else {
+                backlight_right.style.display = 'none';
+            }
+            console.log(PositionData);
         }
-        else {
-            backlight_left.style.display = 'none';
-        }
-        if (x < 8 && !isRightHas) {
-            delete PositionData[Number(y)][Number(x)]
-            const backlight_right_copy = backlight_right.cloneNode(true)
-            backlightRightParent.replaceChild(backlight_right_copy, backlight_right)
-            backlight_right_copy.style.display = 'block';
-            backlight_right_copy.style.left = (x - 2) * 100 + '%';
-            backlight_right_copy.style.top = (Number(y) + difference + -1) * 100 + "%";
-            backlight_right_copy.addEventListener('click', () => {
-                pawn.setAttribute('data-x', String(Number(x) + 1));
-                pawn.setAttribute('data-y', String(Number(y) + difference));
-                movePawn(i, side, false)
-                if (!((Number(y) + difference) in PositionData)) {
-                    PositionData[Number(y) + difference] = {}
-                }
-                PositionData[Number(y) + difference][Number(x) + 1] = side === 'black' ? true : false;
-            })
-
-        }
-        else {
-            backlight_right.style.display = 'none';
-        }
-        console.log(PositionData);
         //alert(${x} ${y} ${side})
     }
     const backlight_off = () => {
