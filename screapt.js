@@ -38,8 +38,8 @@ const movePawn = (index, side, isLeft) => {
     const pawn = document.getElementById(`${side}${index}`);
     const x = pawn.getAttribute('data-x');
     const y = pawn.getAttribute('data-y');
-    const leftValue = pawn.style.left || pawn.offsetLeft;
-    const topValue = pawn.style.top || pawn.offsetTop;
+    const leftValue = pawn.style.left || '25%';
+    const topValue = pawn.style.top || '25%';
     const differenceY = side === 'black' ? 1 : -1;
     const differenceX = isLeft ? -1 : 1;
     startTimer(120)
@@ -59,7 +59,10 @@ window.addEventListener('load', () => {
     const backlight_left = document.getElementById("backlight_left");
     const backlight_right = document.getElementById("backlight_right");
     const white = document.getElementsByClassName('white');
-    const backlight_up = (x, y, side, i) => {
+    const backlight_up = (side, i) => {
+        const currentPawn = document.getElementById(`${side}${i}`)
+        const x = currentPawn.getAttribute('data-x');
+        const y = currentPawn.getAttribute('data-y');
         if (currentStep % 2 === 0 && side === 'black' || currentStep % 2 === 1 && side === 'white') {
             const pawn = document.getElementById(`${side}${i}`);
             var backlight_left = document.getElementById("backlight_left");
@@ -131,22 +134,17 @@ window.addEventListener('load', () => {
         const whitefigure = document.getElementById(`white${i}`);
         const z = whitefigure.getAttribute('data-x');
         const u = whitefigure.getAttribute('data-y');
-        console.log(`${whitefigure} ${i} ${z} ${u}`)
         if (!(u in PositionData)) PositionData[u] = {}
         PositionData[u][z] = false;
     }
     for (let i = 1; i < 13; i++) {
         const blackfigure = document.getElementById(`black${i}`);
-        const x = blackfigure.getAttribute('data-x');
-        const y = blackfigure.getAttribute('data-y');
         blackfigure.addEventListener('click', () => {
-            backlight_up(x, y, 'black', i)
+            backlight_up('black', i)
         })
         const whitefigure = document.getElementById(`white${i}`);
-        const z = whitefigure.getAttribute('data-x');
-        const u = whitefigure.getAttribute('data-y');
         whitefigure.addEventListener('click', () => {
-            backlight_up(z, u, 'white', i)
+            backlight_up('white', i)
         })
 
     }
