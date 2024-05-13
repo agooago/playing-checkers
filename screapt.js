@@ -48,6 +48,10 @@ const movePawn = (index, side, isLeft) => {
     pawn.style.top = parseFloat(topValue) + differenceY * 100 + "%";
     pawn.style.left = parseFloat(leftValue) + differenceX * 100 + "%";
     stepCounter.innerText = `ход №${currentStep}`;
+    const brokeBackLIightLeft = document.getElementById("backlight_left");
+    const brokeBackLIightRight = document.getElementById("backlight_right");
+    brokeBackLIightLeft.style.display = 'none'
+    brokeBackLIightRight.style.display = 'none'
 }
 const backlightLeftParent = document.getElementById("backlight_left_parent");
 const backlightRightParent = document.getElementById('backlight_right_parent');
