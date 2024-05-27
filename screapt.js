@@ -144,9 +144,24 @@ window.addEventListener('load', () => {
         })
         const whitefigure = document.getElementById(`white${i}`);
         whitefigure.addEventListener('click', () => {
-            backlight_up('white', i)
+            backlight_up('white',)
         })
 
     }
     console.log(PositionData)
 })
+const getVariantss = (y, x, isBlack, positionData, previosMovies = []) => {
+    const captures = [];
+    const directions = isBlack ? [[-1, 1], [1, 1]] : [[-1, -1], [-1, 1]];
+    const enemyColor = !isBlack;
+    directions.forEach(([dx, dy]) => {
+        const newY = y + dy;
+        const newX = x + dx;
+        const overX = x + 2 * dx;
+        const overY = y + 2 * dy;
+        if (positionData[newY] && (positionData[newY][newX] === enemyColor) && (overY >= 0) && (overY < 8) && (overX >= 0) && (overX < 8) && (!positionData[overY] || positionData[overY][overX] === undefined)) {
+            const newMovies = [...previosMovies, { y: overY, x: overX }];
+            captures.push(newMovies);
+        }
+    });
+}
