@@ -168,3 +168,7 @@ const getVariants = (y, x, isBlack, positionData, previosMovies = []) => {
     });
     return captures.length ? captures : previosMovies.length ? [previosMovies] : [];
 }
+const testPozitiondata = {
+    
+}
+console.log(`возможные ходы ${getVariants(4,5,true,testPozitiondata)}`)
