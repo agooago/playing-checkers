@@ -150,7 +150,7 @@ window.addEventListener('load', () => {
     }
     console.log(PositionData)
 })
-const getVariantss = (y, x, isBlack, positionData, previosMovies = []) => {
+const getVariants = (y, x, isBlack, positionData, previosMovies = []) => {
     const captures = [];
     const directions = isBlack ? [[-1, 1], [1, 1]] : [[-1, -1], [-1, 1]];
     const enemyColor = !isBlack;
@@ -162,6 +162,9 @@ const getVariantss = (y, x, isBlack, positionData, previosMovies = []) => {
         if (positionData[newY] && (positionData[newY][newX] === enemyColor) && (overY >= 0) && (overY < 8) && (overX >= 0) && (overX < 8) && (!positionData[overY] || positionData[overY][overX] === undefined)) {
             const newMovies = [...previosMovies, { y: overY, x: overX }];
             captures.push(newMovies);
+            const furtherCaptures = getVariants(overY, overX, isBlack, positionData, newMovies);
+            captures.push(...furtherCaptures);
         }
     });
+    return captures.length ? captures : previosMovies.length ? [previosMovies] : [];
 }
