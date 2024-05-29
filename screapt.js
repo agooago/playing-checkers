@@ -150,25 +150,3 @@ window.addEventListener('load', () => {
     }
     console.log(PositionData)
 })
-const getVariants = (y, x, isBlack, positionData, previosMovies = []) => {
-    const captures = [];
-    const directions = isBlack ? [[-1, 1], [1, 1]] : [[-1, -1], [-1, 1]];
-    const enemyColor = !isBlack;
-    directions.forEach(([dx, dy]) => {
-        const newY = y + dy;
-        const newX = x + dx;
-        const overX = x + 2 * dx;
-        const overY = y + 2 * dy;
-        if (positionData[newY] && (positionData[newY][newX] === enemyColor) && (overY >= 0) && (overY < 8) && (overX >= 0) && (overX < 8) && (!positionData[overY] || positionData[overY][overX] === undefined)) {
-            const newMovies = [...previosMovies, { y: overY, x: overX }];
-            captures.push(newMovies);
-            const furtherCaptures = getVariants(overY, overX, isBlack, positionData, newMovies);
-            captures.push(...furtherCaptures);
-        }
-    });
-    return captures.length ? captures : previosMovies.length ? [previosMovies] : [];
-}
-const testPozitiondata = {
-    
-}
-console.log(`возможные ходы ${getVariants(4,5,true,testPozitiondata)}`)
