@@ -34,14 +34,19 @@ startButton.addEventListener("click", () => {
 })
 const stepCounter = document.getElementById("counter");
 const gdeMoiPelmen = document.getElementById("side")
-const movePawn = (index, side, isLeft) => {
+const movePawn = (index, side, isLeft, mode = false) => {
+    let delta;
+    if (!mode) {
+        delta = 1
+    }
+    else { delta = 2 }
     const pawn = document.getElementById(`${side}${index}`);
     const x = pawn.getAttribute('data-x');
     const y = pawn.getAttribute('data-y');
     const leftValue = pawn.style.left || '25%';
     const topValue = pawn.style.top || '25%';
-    const differenceY = side === 'black' ? 1 : -1;
-    const differenceX = isLeft ? -1 : 1;
+    const differenceY = side === 'black' ? delta : -delta;
+    const differenceX = isLeft ? -delta : delta;
     startTimer(120)
     currentStep += 1;
     gdeMoiPelmen.innerText = textSide(currentStep);
@@ -77,7 +82,6 @@ window.addEventListener('load', () => {
                     const nextNextX = nextLeftX - 1;
                     const nextNextY = nextY + difference
                     if (!(nextNextY in PositionData) || !(nextNextX in PositionData[nextNextY]) || PositionData[nextNextY][nextNextX] === undefined && nextLeftX > 0 && nextLeftX < 9 && nextNextY > 0 && nextNextY < 9) {
-                        console.log(`Можем есть влево ${nextNextX} ${nextNextY}`)
                         eatLeft = true;
                         const backlight_left_copy = backlight_left.cloneNode(true)
                         backlightLeftParent.replaceChild(backlight_left_copy, backlight_left)
@@ -85,14 +89,14 @@ window.addEventListener('load', () => {
                         backlight_left_copy.style.left = (x - 3) * 100 + '%';
                         backlight_left_copy.style.top = (y + difference * 2 + -1) * 100 + "%";
                         backlight_left_copy.addEventListener('click', () => {
-                            pawn.setAttribute('data-x', String(x - 1));
-                            pawn.setAttribute('data-y', String(y + difference));
-                            movePawn(i, side, true)
+                            pawn.setAttribute('data-x', String(x - 2));
+                            pawn.setAttribute('data-y', String(y + difference * 2));
+                            movePawn(i, side, true,true)
                             delete PositionData[y][x]
                             if (!((y + difference) in PositionData)) {
-                                PositionData[y + difference] = {}
+                                PositionData[y + difference * 2] = {}
                             }
-                            PositionData[y + difference][x - 1] = side === 'black' ? true : false;
+                            PositionData[y + difference * 2][x - 2] = side === 'black' ? true : false;
                         })
                     }
                 }
@@ -103,22 +107,21 @@ window.addEventListener('load', () => {
                     const nextNextX = nextRightX + 1;
                     const nextNextY = nextY + difference;
                     if (!(nextNextY in PositionData) || !(nextNextX in PositionData[nextNextY]) || PositionData[nextNextY][nextNextX] === undefined && nextLeftX > 0 && nextLeftX < 9 && nextNextY > 0 && nextNextY < 9) {
-                        console.log(`Можем есть вправо ${nextNextX} ${nextNextY}`)
                         eatRight = true;
                         delete PositionData[y][x]
                         const backlight_right_copy = backlight_right.cloneNode(true)
                         backlightRightParent.replaceChild(backlight_right_copy, backlight_right)
                         backlight_right_copy.style.display = 'block';
                         backlight_right_copy.style.left = (x - 1) * 100 + '%';
-                        backlight_right_copy.style.top = (y + difference *2 + -1) * 100 + "%";
+                        backlight_right_copy.style.top = (y + difference * 2 + -1) * 100 + "%";
                         backlight_right_copy.addEventListener('click', () => {
-                            pawn.setAttribute('data-x', String(x + 1));
-                            pawn.setAttribute('data-y', String(y + difference));
-                            movePawn(i, side, false)
+                            pawn.setAttribute('data-x', String(x + 2));
+                            pawn.setAttribute('data-y', String(y + difference * 2));
+                            movePawn(i, side, false,true)
                             if (!((y + difference) in PositionData)) {
-                                PositionData[y + difference] = {}
+                                PositionData[y + difference * 2] = {}
                             }
-                            PositionData[y + difference][x + 1] = side === 'black' ? true : false;
+                            PositionData[y + difference * 2][x + 2] = side === 'black' ? true : false;
                         })
                     }
                 }
