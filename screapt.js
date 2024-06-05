@@ -56,10 +56,14 @@ const movePawn = (index, side, isLeft) => {
 const backlightLeftParent = document.getElementById("backlight_left_parent");
 const backlightRightParent = document.getElementById('backlight_right_parent');
 window.addEventListener('load', () => {
-    const backlight_left = document.getElementById("backlight_left");
-    const backlight_right = document.getElementById("backlight_right");
     const backlight_up = (side, i) => {
-        const currentPawn = document.getElementById(`${side}${i}`)
+        const pawn = document.getElementById(`${side}${i}`);
+        const backlight_left = document.getElementById("backlight_left");
+
+        const backlight_right = document.getElementById("backlight_right");
+        let eatRight = false;
+        let eatLeft = false;
+        const currentPawn = document.getElementById(`${side}${i}`);
         const x = Number(currentPawn.getAttribute('data-x'));
         const y = Number(currentPawn.getAttribute('data-y'));
         const difference = side === 'white' ? -1 : 1;
@@ -67,88 +71,109 @@ window.addEventListener('load', () => {
         const nextRightX = x + 1;
         const nextY = y + difference;
         if (nextY in PositionData) {
-            console.log('На следующей строчки есть пешки')
             if (nextLeftX in PositionData[nextY] && PositionData[nextY][nextLeftX] !== undefined) {
-                console.log('На следующей строчке есть пешка слева')
                 const nextPawnSide = PositionData[nextY][nextLeftX] ? 'black' : 'white';
-                console.log(`пешка на следующей строчке слева ${nextPawnSide}`)
-                if (nextPawnSide !== side) {
-                    console.log('Эта пешка наш противник!');
+                if (nextPawnSide !== side && (currentStep % 2 === 0 && side === 'black' || currentStep % 2 === 1 && side === 'white')) {
                     const nextNextX = nextLeftX - 1;
-                    const nextNextY = nextY + difference;
-                    console.log(`Мы попробуем сеъсть её и перемиститься на кординаты ${nextNextX} ${nextNextY}`)
-                    if (!(nextNextY in PositionData) ||!(nextNextX in PositionData[nextNextY])|| PositionData[nextNextY][nextNextX] === undefined && nextLeftX > 0 && nextLeftX < 9 && nextNextY > 0 && nextNextY < 9) {
-                        console.log('Можем есть влево')
+                    const nextNextY = nextY + difference
+                    if (!(nextNextY in PositionData) || !(nextNextX in PositionData[nextNextY]) || PositionData[nextNextY][nextNextX] === undefined && nextLeftX > 0 && nextLeftX < 9 && nextNextY > 0 && nextNextY < 9) {
+                        console.log(`Можем есть влево ${nextNextX} ${nextNextY}`)
+                        eatLeft = true;
+                        const backlight_left_copy = backlight_left.cloneNode(true)
+                        backlightLeftParent.replaceChild(backlight_left_copy, backlight_left)
+                        backlight_left_copy.style.display = 'block';
+                        backlight_left_copy.style.left = (x - 3) * 100 + '%';
+                        backlight_left_copy.style.top = (y + difference * 2 + -1) * 100 + "%";
+                        backlight_left_copy.addEventListener('click', () => {
+                            pawn.setAttribute('data-x', String(x - 1));
+                            pawn.setAttribute('data-y', String(y + difference));
+                            movePawn(i, side, true)
+                            delete PositionData[y][x]
+                            if (!((y + difference) in PositionData)) {
+                                PositionData[y + difference] = {}
+                            }
+                            PositionData[y + difference][x - 1] = side === 'black' ? true : false;
+                        })
                     }
                 }
             }
             if (nextRightX in PositionData[nextY] && PositionData[nextY][nextRightX] !== undefined) {
-                console.log('На следующей строчке есть пешка справа')
                 const nextPawnSide = PositionData[nextY][nextRightX] ? 'black' : 'white';
-                console.log(`пешка на следующей строчке справа ${nextPawnSide}`)
-                if (nextPawnSide !== side) {
-                    console.log('Эта пешка наш противник!');
+                if (nextPawnSide !== side && (currentStep % 2 === 0 && side === 'black' || currentStep % 2 === 1 && side === 'white')) {
                     const nextNextX = nextRightX + 1;
                     const nextNextY = nextY + difference;
-                    console.log(`Мы попробуем сеъсть её и перемиститься на кординаты ${nextNextX} ${nextNextY}`)
-                    if (!(nextNextY in PositionData) ||!(nextNextX in PositionData[nextNextY])|| PositionData[nextNextY][nextNextX] === undefined && nextLeftX > 0 && nextLeftX < 9 && nextNextY > 0 && nextNextY < 9) {
-                        console.log('Можем есть вправо')
+                    if (!(nextNextY in PositionData) || !(nextNextX in PositionData[nextNextY]) || PositionData[nextNextY][nextNextX] === undefined && nextLeftX > 0 && nextLeftX < 9 && nextNextY > 0 && nextNextY < 9) {
+                        console.log(`Можем есть вправо ${nextNextX} ${nextNextY}`)
+                        eatRight = true;
+                        delete PositionData[y][x]
+                        const backlight_right_copy = backlight_right.cloneNode(true)
+                        backlightRightParent.replaceChild(backlight_right_copy, backlight_right)
+                        backlight_right_copy.style.display = 'block';
+                        backlight_right_copy.style.left = (x - 1) * 100 + '%';
+                        backlight_right_copy.style.top = (y + difference *2 + -1) * 100 + "%";
+                        backlight_right_copy.addEventListener('click', () => {
+                            pawn.setAttribute('data-x', String(x + 1));
+                            pawn.setAttribute('data-y', String(y + difference));
+                            movePawn(i, side, false)
+                            if (!((y + difference) in PositionData)) {
+                                PositionData[y + difference] = {}
+                            }
+                            PositionData[y + difference][x + 1] = side === 'black' ? true : false;
+                        })
                     }
                 }
             }
-}
-        if (currentStep % 2 === 0 && side === 'black' || currentStep % 2 === 1 && side === 'white') {
-            const pawn = document.getElementById(`${side}${i}`);
-            var backlight_left = document.getElementById("backlight_left");
-            var backlight_right = document.getElementById("backlight_right");
-            const difference = side === 'white' ? -1 : 1;
-            const isHasRow = (y + difference) in PositionData
-            const isLeftHas = isHasRow && ((x - 1) in PositionData[y + difference])
-            const isRightHas = isHasRow && ((x + 1) in PositionData[y + difference])
-
-            if (x > 1 && !isLeftHas) {
-                const backlight_left_copy = backlight_left.cloneNode(true)
-                backlightLeftParent.replaceChild(backlight_left_copy, backlight_left)
-                backlight_left_copy.style.display = 'block';
-                backlight_left_copy.style.left = (x - 2) * 100 + '%';
-                backlight_left_copy.style.top = (y + difference + -1) * 100 + "%";
-                backlight_left_copy.addEventListener('click', () => {
-                    pawn.setAttribute('data-x', String(x - 1));
-                    pawn.setAttribute('data-y', String(y + difference));
-                    movePawn(i, side, true)
-                    delete PositionData[y][x]
-                    if (!((y + difference) in PositionData)) {
-                        PositionData[y + difference] = {}
-                    }
-                    PositionData[y + difference][x - 1] = side === 'black' ? true : false;
-                })
-
-            }
-            else {
-                backlight_left.style.display = 'none';
-            }
-            if (x < 8 && !isRightHas) {
-                delete PositionData[y][x]
-                const backlight_right_copy = backlight_right.cloneNode(true)
-                backlightRightParent.replaceChild(backlight_right_copy, backlight_right)
-                backlight_right_copy.style.display = 'block';
-                backlight_right_copy.style.left = (x - 2) * 100 + '%';
-                backlight_right_copy.style.top = (y + difference + -1) * 100 + "%";
-                backlight_right_copy.addEventListener('click', () => {
-                    pawn.setAttribute('data-x', String(x + 1));
-                    pawn.setAttribute('data-y', String(y + difference));
-                    movePawn(i, side, false)
-                    if (!((y + difference) in PositionData)) {
-                        PositionData[y + difference] = {}
-                    }
-                    PositionData[y + difference][x + 1] = side === 'black' ? true : false;
-                })
-
-            }
-            else {
-                backlight_right.style.display = 'none';
-            }
         }
+        if (!eatLeft && !eatRight)
+            if (currentStep % 2 === 0 && side === 'black' || currentStep % 2 === 1 && side === 'white') {
+                const difference = side === 'white' ? -1 : 1;
+                const isHasRow = (y + difference) in PositionData
+                const isLeftHas = isHasRow && ((x - 1) in PositionData[y + difference])
+                const isRightHas = isHasRow && ((x + 1) in PositionData[y + difference])
+
+                if (x > 1 && !isLeftHas) {
+                    const backlight_left_copy = backlight_left.cloneNode(true)
+                    backlightLeftParent.replaceChild(backlight_left_copy, backlight_left)
+                    backlight_left_copy.style.display = 'block';
+                    backlight_left_copy.style.left = (x - 2) * 100 + '%';
+                    backlight_left_copy.style.top = (y + difference + -1) * 100 + "%";
+                    backlight_left_copy.addEventListener('click', () => {
+                        pawn.setAttribute('data-x', String(x - 1));
+                        pawn.setAttribute('data-y', String(y + difference));
+                        movePawn(i, side, true)
+                        delete PositionData[y][x]
+                        if (!((y + difference) in PositionData)) {
+                            PositionData[y + difference] = {}
+                        }
+                        PositionData[y + difference][x - 1] = side === 'black' ? true : false;
+                    })
+
+                }
+                else {
+                    backlight_left.style.display = 'none';
+                }
+                if (x < 8 && !isRightHas) {
+                    delete PositionData[y][x]
+                    const backlight_right_copy = backlight_right.cloneNode(true)
+                    backlightRightParent.replaceChild(backlight_right_copy, backlight_right)
+                    backlight_right_copy.style.display = 'block';
+                    backlight_right_copy.style.left = (x - 2) * 100 + '%';
+                    backlight_right_copy.style.top = (y + difference + -1) * 100 + "%";
+                    backlight_right_copy.addEventListener('click', () => {
+                        pawn.setAttribute('data-x', String(x + 1));
+                        pawn.setAttribute('data-y', String(y + difference));
+                        movePawn(i, side, false)
+                        if (!((y + difference) in PositionData)) {
+                            PositionData[y + difference] = {}
+                        }
+                        PositionData[y + difference][x + 1] = side === 'black' ? true : false;
+                    })
+
+                }
+                else {
+                    backlight_right.style.display = 'none';
+                }
+            }
     }
     for (let i = 1; i < 13; i++) {
         const blackfigure = document.getElementById(`black${i}`);
