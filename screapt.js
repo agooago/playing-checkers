@@ -81,7 +81,14 @@ window.addEventListener('load', () => {
                 if (nextPawnSide !== side && (currentStep % 2 === 0 && side === 'black' || currentStep % 2 === 1 && side === 'white')) {
                     const nextNextX = nextLeftX - 1;
                     const nextNextY = nextY + difference
-                    if (!(nextNextY in PositionData) || !(nextNextX in PositionData[nextNextY]) || PositionData[nextNextY][nextNextX] === undefined && nextLeftX > 0 && nextLeftX < 9 && nextNextY > 0 && nextNextY < 9) {
+                    if (
+                        ((!(nextNextY in PositionData)
+                            || !(nextNextX in PositionData[nextNextY])
+                            || PositionData[nextNextY][nextNextX] === undefined && nextLeftX > 0))
+                        && nextLeftX < 1
+                        && nextNextY > 0
+                        && nextNextY < 9
+                    ) {
                         eatLeft = true;
                         const backlight_left_copy = backlight_left.cloneNode(true)
                         backlightLeftParent.replaceChild(backlight_left_copy, backlight_left)
@@ -91,7 +98,7 @@ window.addEventListener('load', () => {
                         backlight_left_copy.addEventListener('click', () => {
                             pawn.setAttribute('data-x', String(x - 2));
                             pawn.setAttribute('data-y', String(y + difference * 2));
-                            movePawn(i, side, true,true)
+                            movePawn(i, side, true, true)
                             delete PositionData[y][x]
                             if (!((y + difference) in PositionData)) {
                                 PositionData[y + difference * 2] = {}
@@ -106,7 +113,15 @@ window.addEventListener('load', () => {
                 if (nextPawnSide !== side && (currentStep % 2 === 0 && side === 'black' || currentStep % 2 === 1 && side === 'white')) {
                     const nextNextX = nextRightX + 1;
                     const nextNextY = nextY + difference;
-                    if (!(nextNextY in PositionData) || !(nextNextX in PositionData[nextNextY]) || PositionData[nextNextY][nextNextX] === undefined && nextLeftX > 0 && nextLeftX < 9 && nextNextY > 0 && nextNextY < 9) {
+                    if (
+                   ( !(nextNextY in PositionData)
+                    || !(nextNextX in PositionData[nextNextY])
+                    || PositionData[nextNextY][nextNextX] === undefined)
+                    && nextLeftX > 0
+                    && nextLeftX < 6
+                    && nextNextY > 0
+                    && nextNextY < 9
+                ) { 
                         eatRight = true;
                         delete PositionData[y][x]
                         const backlight_right_copy = backlight_right.cloneNode(true)
@@ -117,7 +132,7 @@ window.addEventListener('load', () => {
                         backlight_right_copy.addEventListener('click', () => {
                             pawn.setAttribute('data-x', String(x + 2));
                             pawn.setAttribute('data-y', String(y + difference * 2));
-                            movePawn(i, side, false,true)
+                            movePawn(i, side, false, true)
                             if (!((y + difference) in PositionData)) {
                                 PositionData[y + difference * 2] = {}
                             }
@@ -134,7 +149,7 @@ window.addEventListener('load', () => {
                 const isLeftHas = isHasRow && ((x - 1) in PositionData[y + difference])
                 const isRightHas = isHasRow && ((x + 1) in PositionData[y + difference])
 
-                if (x > 1 && !isLeftHas) {
+                if (x > 1 && !isLeftHas && (y + difference) < 9 && (y + difference) > 0) {
                     const backlight_left_copy = backlight_left.cloneNode(true)
                     backlightLeftParent.replaceChild(backlight_left_copy, backlight_left)
                     backlight_left_copy.style.display = 'block';
@@ -155,7 +170,7 @@ window.addEventListener('load', () => {
                 else {
                     backlight_left.style.display = 'none';
                 }
-                if (x < 8 && !isRightHas) {
+                if (x < 8 && !isRightHas && (y + difference) < 9 && (y + difference) > 0) {
                     delete PositionData[y][x]
                     const backlight_right_copy = backlight_right.cloneNode(true)
                     backlightRightParent.replaceChild(backlight_right_copy, backlight_right)
