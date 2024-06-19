@@ -29,7 +29,7 @@ startButton.addEventListener("click", () => {
     startTimer(120)
     setTimeout(() => {
         phone.style.display = "none";
-        startButton.style.display = "none";
+        startButton.style.display = "none"; А
     }, 2000)
 })
 const stepCounter = document.getElementById("counter");
@@ -39,10 +39,18 @@ const movePawn = (index, side, isLeft, mode = false) => {
     if (!mode) {
         delta = 1
     }
-    else { delta = 2 }
+    else {
+        delta = 2;
+
+    }
     const pawn = document.getElementById(`${side}${index}`);
-    const x = pawn.getAttribute('data-x');
-    const y = pawn.getAttribute('data-y');
+    const x = Number ( pawn.getAttribute('data-x') );
+    const y = Number ( pawn.getAttribute('data-y') );
+    if (mode) {
+        const newX = x + (isLeft ? - 1 : + 1);
+        const newY = y + (side === 'black' ? -1 : +1);
+        alert (`едим пешку по кординатам ${newX} ${newY}`)
+    }
     const leftValue = pawn.style.left || '25%';
     const topValue = pawn.style.top || '25%';
     const differenceY = side === 'black' ? delta : -delta;
@@ -60,6 +68,9 @@ const movePawn = (index, side, isLeft, mode = false) => {
 }
 const backlightLeftParent = document.getElementById("backlight_left_parent");
 const backlightRightParent = document.getElementById('backlight_right_parent');
+const deletePawn = (x, y) => {
+    alert(`deletePawn удаляем пешку по кординатам ${x}:${y}`)
+}
 window.addEventListener('load', () => {
     const backlight_up = (side, i) => {
         const pawn = document.getElementById(`${side}${i}`);
@@ -89,6 +100,7 @@ window.addEventListener('load', () => {
                         && nextNextY > 0
                         && nextNextY < 9
                     ) {
+                        deletePawn(nextLeftX, nextY)
                         eatLeft = true;
                         const backlight_left_copy = backlight_left.cloneNode(true)
                         backlightLeftParent.replaceChild(backlight_left_copy, backlight_left)
@@ -114,14 +126,15 @@ window.addEventListener('load', () => {
                     const nextNextX = nextRightX + 1;
                     const nextNextY = nextY + difference;
                     if (
-                   ( !(nextNextY in PositionData)
-                    || !(nextNextX in PositionData[nextNextY])
-                    || PositionData[nextNextY][nextNextX] === undefined)
-                    && nextLeftX > 0
-                    && nextLeftX < 6
-                    && nextNextY > 0
-                    && nextNextY < 9
-                ) { 
+                        (!(nextNextY in PositionData)
+                            || !(nextNextX in PositionData[nextNextY])
+                            || PositionData[nextNextY][nextNextX] === undefined)
+                        && nextLeftX > 0
+                        && nextLeftX < 6
+                        && nextNextY > 0
+                        && nextNextY < 9
+                    ) {
+                        deletePawn(nextLeftX, nextY)
                         eatRight = true;
                         delete PositionData[y][x]
                         const backlight_right_copy = backlight_right.cloneNode(true)
